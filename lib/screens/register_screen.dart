@@ -10,37 +10,35 @@ class RegisterScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
 
-  Future<void> _register(BuildContext context) async {
+ Future<void> _register(BuildContext context) async {
     final name = nameController.text.trim();
     final surname = surnameController.text.trim();
     final email = emailController.text.trim();
     final phone = phoneController.text.trim();
 
     try {
-      final credential = await FirebaseAuth.instance.signInAnonymously();
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(credential.user!.uid)
-          .set({
+      // Adicionar diretamente os dados no Firestore sem autenticação
+      await FirebaseFirestore.instance.collection('users').add({
         'name': name,
         'surname': surname,
         'email': email,
         'phone': phone,
-        'uid': credential.user!.uid,
       });
 
+      // Se o registro foi bem-sucedido, navega para a MapScreen
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => MapScreen()),
       );
     } catch (e) {
       print('Erro ao cadastrar: $e');
+      // Exibir a mensagem de erro na tela
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Erro ao registrar!'),
       ));
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
