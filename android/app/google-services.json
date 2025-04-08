@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "150850140320",
-    "project_id": "localizacao-3b60d",
-    "storage_bucket": "localizacao-3b60d.firebasestorage.app"
+    "project_number": "678750698298",
+    "project_id": "fabled-imagery-454814-c8",
+    "storage_bucket": "fabled-imagery-454814-c8.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:150850140320:android:bf0d96ef56afe439ca71c5",
+        "mobilesdk_app_id": "1:678750698298:android:6f19824973d92babdcee03",
         "android_client_info": {
           "package_name": "jedo.mafuco"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCc4uG8GYR-hsM43MRa4VTfumzqsyyCXJ8"
+          "current_key": "AIzaSyDCQvgZXYyn5YSKvmpeRFjpDLPP0Y1p-as"
         }
       ],
       "services": {
