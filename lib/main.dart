@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'screens/splash_screen.dart';
+import 'screens/map_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,7 +15,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Mototaxi User',
       theme: ThemeData(primarySwatch: Colors.green),
-      home: SplashScreen(),
+      debugShowCheckedModeBanner: false,
+      initialRoute: '/',
+      routes: {
+        '/': (context) => SplashScreen(),
+        '/mapa': (context) => MapScreen(),
+      },
     );
   }
 }

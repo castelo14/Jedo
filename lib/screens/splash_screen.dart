@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'map_screen.dart';
+import 'map_screen1.dart';
 import 'register_screen.dart';
 
 class SplashScreen extends StatelessWidget {

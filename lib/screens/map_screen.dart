@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
 
 class MapScreen extends StatefulWidget {
   @override
@@ -9,57 +8,30 @@ class MapScreen extends StatefulWidget {
 }
 
 class _MapScreenState extends State<MapScreen> {
-  late GoogleMapController _mapController;
-  Position? _currentPosition;
-  final Set<Marker> _markers = {};
+  GoogleMapController? _controller;
+  Location _location = Location();
+  LatLng _posicaoAtual = LatLng(0, 0);
 
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
+    _atualizarLocalizacao();
   }
 
-  Future<void> _getCurrentLocation() async {
-    LocationPermission permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-    }
-
-    _currentPosition = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    _mapController.animateCamera(CameraUpdate.newLatLngZoom(
-      LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-      16,
-    ));
-
+  void _atualizarLocalizacao() async {
+    var localizacao = await _location.getLocation();
     setState(() {
-      _markers.add(
-        Marker(
-          markerId: MarkerId('user'),
-          position:
-              LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-          infoWindow: InfoWindow(title: 'Você'),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
-        ),
-      );
+      _posicaoAtual = LatLng(localizacao.latitude!, localizacao.longitude!);
+    });
 
-      // Exemplo de 2 mototaxistas fictícios
-      _markers.add(
-        Marker(
-          markerId: MarkerId('moto1'),
-          position: LatLng(
-              _currentPosition!.latitude + 0.001, _currentPosition!.longitude),
-          infoWindow: InfoWindow(title: 'Mototaxista João'),
-        ),
-      );
+    _location.onLocationChanged.listen((localizacaoNova) {
+      setState(() {
+        _posicaoAtual = LatLng(localizacaoNova.latitude!, localizacaoNova.longitude!);
+      });
 
-      _markers.add(
-        Marker(
-          markerId: MarkerId('moto2'),
-          position: LatLng(
-              _currentPosition!.latitude - 0.001, _currentPosition!.longitude),
-          infoWindow: InfoWindow(title: 'Mototaxista Maria'),
+      _controller?.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(target: _posicaoAtual, zoom: 15),
         ),
       );
     });
@@ -68,19 +40,18 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Mapa')),
-      body: _currentPosition == null
-          ? Center(child: CircularProgressIndicator())
-          : GoogleMap(
-              onMapCreated: (controller) => _mapController = controller,
-              initialCameraPosition: CameraPosition(
-                target: LatLng(_currentPosition!.latitude, _currentPosition!.longitude),
-                zoom: 16,
-              ),
-              markers: _markers,
-              myLocationEnabled: true,
-              myLocationButtonEnabled: true,
-            ),
+      appBar: AppBar(title: Text("Mapa Mototaxi")),
+      body: GoogleMap(
+        initialCameraPosition: CameraPosition(
+          target: _posicaoAtual,
+          zoom: 15,
+        ),
+        onMapCreated: (controller) {
+          _controller = controller;
+        },
+        myLocationEnabled: true,
+        myLocationButtonEnabled: true,
+      ),
     );
   }
 }
