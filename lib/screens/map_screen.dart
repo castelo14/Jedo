@@ -158,10 +158,59 @@ class _MapScreenState extends State<MapScreen> {
               height: 60, // Altura do logo (ajuste conforme necessário)
             ),
             SizedBox(width: 8), // Espaço entre o logo e o título
-           
           ],
         ),
         backgroundColor: Colors.blueAccent,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/profile_picture.png'), // Coloque o caminho para a imagem de perfil
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Usuário',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                  ),
+                ],
+              ),
+            ),
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text('Histórico'),
+              onTap: () {
+                // Lógica para abrir o histórico
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.help),
+              title: Text('Ajuda'),
+              onTap: () {
+                // Lógica para abrir a ajuda
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.person),
+              title: Text('Perfil'),
+              onTap: () {
+                // Lógica para abrir o perfil
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
       ),
       body: Stack(
         children: [
@@ -197,7 +246,6 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ],
                   ),
-                
                   child: TextField(
                     controller: _destinoController,
                     onChanged: _buscarSugestoes,
@@ -267,14 +315,11 @@ class _MapScreenState extends State<MapScreen> {
             child: Container(
               color: Colors.black.withOpacity(0.8), // Cor de fundo semi-translúcida
               padding: EdgeInsets.symmetric(vertical: 10),
-              
               child: Text(
                 _tempoEstimado.isNotEmpty ? "Tempo estimado: $_tempoEstimado" : "Aguardando rota...",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 16),
-                 
               ),
-              
             ),
           ),
         ],
