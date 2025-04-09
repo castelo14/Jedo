@@ -23,6 +23,9 @@ class _MapScreenState extends State<MapScreen> {
   Set<Marker> _markers = {};  // Variável para armazenar os markers
   LatLng? _destino;
 
+  String _tempoEstimado = ""; // Variável para armazenar o tempo estimado
+  bool _showTempoEstimado = false; // Controla a exibição da barra de tempo estimado
+
   @override
   void initState() {
     super.initState();
@@ -104,7 +107,7 @@ class _MapScreenState extends State<MapScreen> {
       });
 
       final duracao = dados['routes'][0]['legs'][0]['duration']['text'];
-      _mostrarDialog(duracao);
+      _mostrarTempoEstimado(duracao);
     }
   }
 
@@ -138,20 +141,18 @@ class _MapScreenState extends State<MapScreen> {
     return poly;
   }
 
-  void _mostrarDialog(String duracao) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text("Tempo estimado"),
-        content: Text("Tempo até o destino: $duracao"),
-        actions: [
-          TextButton(
-            child: Text("OK"),
-            onPressed: () => Navigator.pop(context),
-          )
-        ],
-      ),
-    );
+  void _mostrarTempoEstimado(String duracao) {
+    setState(() {
+      _tempoEstimado = duracao;
+      _showTempoEstimado = true;
+    });
+
+    // Fecha a barra depois de 5 segundos
+    Future.delayed(Duration(seconds: 5), () {
+      setState(() {
+        _showTempoEstimado = false;
+      });
+    });
   }
 
   @override
@@ -252,6 +253,23 @@ class _MapScreenState extends State<MapScreen> {
               ],
             ),
           ),
+
+          // Exibição da barra com o tempo estimado (estilo Hitch)
+          if (_showTempoEstimado)
+            Positioned(
+              top: 0, // Fixa a barra no topo
+              left: 0,
+              right: 0,
+              child: Container(
+                color: Colors.black.withOpacity(0.8), // Cor de fundo semi-translúcida
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Text(
+                  "Tempo estimado: $_tempoEstimado",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+              ),
+            ),
         ],
       ),
     );
