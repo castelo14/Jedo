@@ -20,6 +20,7 @@ class _MapScreenState extends State<MapScreen> {
   List<dynamic> _sugestoes = [];
 
   Set<Polyline> _polylines = {};
+  Set<Marker> _markers = {};  // Variável para armazenar os markers
   LatLng? _destino;
 
   @override
@@ -91,6 +92,15 @@ class _MapScreenState extends State<MapScreen> {
             width: 5,
           ),
         };
+        // Adiciona o marker de destino
+        _markers = {
+          Marker(
+            markerId: MarkerId("destino"),
+            position: _destino!,
+            infoWindow: InfoWindow(title: "Destino", snippet: "Aqui é o destino"),
+            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          ),
+        };
       });
 
       final duracao = dados['routes'][0]['legs'][0]['duration']['text'];
@@ -148,102 +158,102 @@ class _MapScreenState extends State<MapScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("JEDO", style: TextStyle(color: const Color.fromARGB(255, 255, 254, 254))),  backgroundColor: const Color.fromARGB(255, 45, 7, 184), ),
-    body: Stack(
-      children: [
-        GoogleMap(
-          initialCameraPosition: CameraPosition(
-            target: _posicaoAtual,
-            zoom: 15,
+      body: Stack(
+        children: [
+          GoogleMap(
+            initialCameraPosition: CameraPosition(
+              target: _posicaoAtual,
+              zoom: 15,
+            ),
+            onMapCreated: (controller) {
+              _controller = controller;
+            },
+            myLocationEnabled: true,
+            polylines: _polylines,
+            markers: _markers,  // Exibe os markers no mapa
           ),
-          onMapCreated: (controller) {
-            _controller = controller;
-          },
-          myLocationEnabled: true,
-          polylines: _polylines,
-        ),
 
-        // Campo de texto flutuante estilizado
-        Positioned(
-          top: 40,
-          left: 20,
-          right: 20,
-          child: Column(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black12,
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  controller: _destinoController,
-                  onChanged: _buscarSugestoes,
-                  decoration: InputDecoration(
-                    hintText: "Para onde vamos?",
-                    hintStyle: TextStyle(color: Colors.grey[600]),
-                    prefixIcon: Icon(Icons.search, color: Colors.blueAccent),
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                  ),
-                ),
-              ),
-
-              // Lista de sugestões
-              if (_sugestoes.isNotEmpty)
+          // Campo de texto flutuante estilizado
+          Positioned(
+            top: 40,
+            left: 20,
+            right: 20,
+            child: Column(
+              children: [
                 Container(
-                  margin: EdgeInsets.only(top: 5),
-                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(30),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black26,
-                        blurRadius: 8,
-                        offset: Offset(0, 3),
+                        color: Colors.black12,
+                        blurRadius: 10,
+                        offset: Offset(0, 4),
                       ),
                     ],
                   ),
-                  constraints: BoxConstraints(maxHeight: 200),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _sugestoes.length,
-                    itemBuilder: (context, index) {
-                      final sugestao = _sugestoes[index];
-                      return ListTile(
-                        leading: Icon(Icons.location_on, color: Colors.redAccent),
-                        title: Text(
-                          sugestao['structured_formatting']['main_text'] ?? '',
-                          style: TextStyle(fontWeight: FontWeight.w600),
-                        ),
-                        subtitle: Text(
-                          sugestao['structured_formatting']['secondary_text'] ?? '',
-                          style: TextStyle(color: Colors.grey[600]),
-                        ),
-                        onTap: () {
-                          _selecionarSugestao(sugestao['place_id']);
-                          setState(() {
-                            _destinoController.text =
-                                sugestao['structured_formatting']['main_text'];
-                            _sugestoes = [];
-                          });
-                        },
-                      );
-                    },
+                  child: TextField(
+                    controller: _destinoController,
+                    onChanged: _buscarSugestoes,
+                    decoration: InputDecoration(
+                      hintText: "Para onde vamos?",
+                      hintStyle: TextStyle(color: Colors.grey[600]),
+                      prefixIcon: Icon(Icons.search, color: Colors.blueAccent),
+                      border: InputBorder.none,
+                      contentPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                    ),
                   ),
                 ),
-            ],
-          ),
-        ),
-      ],
-    ),
 
+                // Lista de sugestões
+                if (_sugestoes.isNotEmpty)
+                  Container(
+                    margin: EdgeInsets.only(top: 5),
+                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(15),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black26,
+                          blurRadius: 8,
+                          offset: Offset(0, 3),
+                        ),
+                      ],
+                    ),
+                    constraints: BoxConstraints(maxHeight: 200),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _sugestoes.length,
+                      itemBuilder: (context, index) {
+                        final sugestao = _sugestoes[index];
+                        return ListTile(
+                          leading: Icon(Icons.location_on, color: Colors.redAccent),
+                          title: Text(
+                            sugestao['structured_formatting']['main_text'] ?? '',
+                            style: TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text(
+                            sugestao['structured_formatting']['secondary_text'] ?? '',
+                            style: TextStyle(color: Colors.grey[600]),
+                          ),
+                          onTap: () {
+                            _selecionarSugestao(sugestao['place_id']);
+                            setState(() {
+                              _destinoController.text =
+                                  sugestao['structured_formatting']['main_text'];
+                              _sugestoes = [];
+                            });
+                          },
+                        );
+                      },
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
