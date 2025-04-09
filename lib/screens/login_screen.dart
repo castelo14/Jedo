@@ -117,29 +117,43 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
    Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 40),
+              //Center(
+              //  child: Image.asset(
+              //    'assets/logo.jpeg', // Caminho da sua imagem
+              //    width: 120, // Ajuste o tamanho da imagem
+              //    height: 120, // Ajuste o tamanho da imagem
+              //  ),
+              //),
+              Image.asset(
+                'assets/logo.png', 
+                height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error, color: Colors.red, size: 50);
+                },
+              ),
+              //const SizedBox(height: 40),
               Text(
                 'Bem-vindo!',
                 style: TextStyle(
-                  fontSize: 32,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   color: Colors.blueAccent,
                 ),
                 textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Entre usando seu email ou número de telefone.',
-                style: TextStyle(fontSize: 16, color: Colors.blueAccent),
-                textAlign: TextAlign.center,
-              ),
+               ),
+              //const SizedBox(height: 10),
+              //Text(
+              //  'Entre usando seu email ou número de telefone.',
+              //  style: TextStyle(fontSize: 16, color: Colors.blueAccent),
+              //  textAlign: TextAlign.center,
+              //),
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -168,10 +182,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     if (_isEmailLogin)
                       TextFormField(
+                        style: TextStyle(
+                          //fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                         controller: emailController,
                         decoration: InputDecoration(
                           labelText: 'Email',
-                          prefixIcon: const Icon(Icons.email),
+                          prefixIcon: const Icon(Icons.email, color: Colors.blueAccent),
+                          hintStyle: TextStyle(color: Colors.white70),
+                          fillColor: const Color.fromARGB(26, 255, 255, 255),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -181,10 +202,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     if (!_isEmailLogin)
                       TextFormField(
+                         style: TextStyle(
+                          //fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
                         controller: phoneController,
                         decoration: InputDecoration(
+                          hintStyle: TextStyle(color: Colors.white70),
                           labelText: 'Telefone',
-                          prefixIcon: const Icon(Icons.phone),
+                          prefixIcon: const Icon(Icons.phone, color: Colors.blueAccent),
+                          fillColor: Colors.white10,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
                           ),
@@ -193,8 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.phone,
                       ),
                     const SizedBox(height: 20),
-                    
-                    const SizedBox(height: 30),
+
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -204,16 +231,17 @@ class _LoginScreenState extends State<LoginScreen> {
                             _loginWithPhone(context);
                           }
                         }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
+                        
+                        },
+                        style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
+                        padding: EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      child: const Text(
-                        'Logar',
+                      child: Text(
+                        "Entrar",
                         style: TextStyle(fontSize: 18, color: Colors.white),
                       ),
                     ),

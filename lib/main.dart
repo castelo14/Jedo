@@ -14,9 +14,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mototáxi',
+      title: 'JEDO',
+      theme: ThemeData(
+        // Definindo o fundo preto para o Scaffold
+        scaffoldBackgroundColor: Colors.black,
+        // Outras personalizações de tema podem ser feitas aqui
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.dark(), // você pode personalizar se quiser
+      //theme: ThemeData.dark(), // você pode personalizar se quiser
       home: LoginScreen(), // inicializa com a tela de login
     );
   }

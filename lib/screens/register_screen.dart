@@ -101,22 +101,33 @@ class RegisterScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Cadastro'),
+       title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo.png', // Caminho para o logo
+              height: 40, // Altura do logo (ajuste conforme necessário)
+            ),
+            SizedBox(width: 8), // Espaço entre o logo e o título
+            Text('Cadastro'),
+          ],
+        ),
         backgroundColor: Colors.blueAccent,
+        
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CircleAvatar(radius: 50, backgroundImage: AssetImage('assets/user.png')),
-            //Center(
-            //  child: Image.asset(
-            //    'assets/images/user.png', // Caminho da sua imagem
-            //    width: 150, // Ajuste o tamanho da imagem
-            //    height: 150, // Ajuste o tamanho da imagem
-            //  ),
-            //),
+            //CircleAvatar(radius: 50, backgroundImage: AssetImage('assets/user.png')),
+            Center(
+              child: Image.asset(
+                'assets/user.png', // Caminho da sua imagem
+                width: 120, // Ajuste o tamanho da imagem
+                height: 120, // Ajuste o tamanho da imagem
+              ),
+            ),
             SizedBox(height: 32), // Espaço entre a imagem e o formulário
 
             Form(
@@ -125,6 +136,7 @@ class RegisterScreen extends StatelessWidget {
                 children: [
                   // Campo Nome
                   TextFormField(
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                     controller: nameController,
                     decoration: InputDecoration(
                       labelText: 'Nome',
@@ -144,6 +156,7 @@ class RegisterScreen extends StatelessWidget {
 
                   // Campo Sobrenome
                   TextFormField(
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                     controller: surnameController,
                     decoration: InputDecoration(
                       labelText: 'Sobrenome',
@@ -163,6 +176,7 @@ class RegisterScreen extends StatelessWidget {
 
                   // Campo Email
                   TextFormField(
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                     controller: emailController,
                     decoration: InputDecoration(
                       labelText: 'E-mail',
@@ -182,6 +196,7 @@ class RegisterScreen extends StatelessWidget {
 
                   // Campo Telefone
                   TextFormField(
+                    style: TextStyle(fontSize: 18, color: Colors.white),
                     controller: phoneController,
                     decoration: InputDecoration(
                       labelText: 'Telefone',
@@ -209,7 +224,8 @@ class RegisterScreen extends StatelessWidget {
                     },
                     style: _buttonStyle(),
                     child: Text(
-                      'Cadastrar', style: TextStyle(color: Colors.black,
+                      
+                      'Cadastrar', style: TextStyle(color: Colors.white,
                       ),
                     ),
                   ),

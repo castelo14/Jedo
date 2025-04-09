@@ -149,7 +149,20 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("JEDO", style: TextStyle(color: const Color.fromARGB(255, 255, 254, 254))),  backgroundColor: const Color.fromARGB(255, 45, 7, 184), ),
+      appBar: AppBar(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/logo.png', // Caminho para o logo
+              height: 60, // Altura do logo (ajuste conforme necessário)
+            ),
+            SizedBox(width: 8), // Espaço entre o logo e o título
+           
+          ],
+        ),
+        backgroundColor: Colors.blueAccent,
+      ),
       body: Stack(
         children: [
           GoogleMap(
@@ -184,6 +197,7 @@ class _MapScreenState extends State<MapScreen> {
                       ),
                     ],
                   ),
+                
                   child: TextField(
                     controller: _destinoController,
                     onChanged: _buscarSugestoes,
@@ -253,11 +267,14 @@ class _MapScreenState extends State<MapScreen> {
             child: Container(
               color: Colors.black.withOpacity(0.8), // Cor de fundo semi-translúcida
               padding: EdgeInsets.symmetric(vertical: 10),
+              
               child: Text(
                 _tempoEstimado.isNotEmpty ? "Tempo estimado: $_tempoEstimado" : "Aguardando rota...",
                 textAlign: TextAlign.center,
                 style: TextStyle(color: Colors.white, fontSize: 16),
+                 
               ),
+              
             ),
           ),
         ],
