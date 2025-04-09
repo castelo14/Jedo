@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:jedo/screens/register_screen.dart';
 import 'map_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -114,94 +115,126 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            SizedBox(height: 32),
-            Form(
-              key: _formKey,
-              child: Column(
+      backgroundColor: Colors.blue[50],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(24.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 40),
+              Text(
+                'Bem-vindo!',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blueAccent,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Entre usando seu email ou número de telefone.',
+                style: TextStyle(fontSize: 16, color: Colors.blueAccent),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 30),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // Switch entre login por e-mail ou telefone
-                  SwitchListTile(
-                    title: Text('Login com e-mail'),
-                    value: _isEmailLogin,
-                    onChanged: (bool value) {
-                      setState(() {
-                        _isEmailLogin = value;
-                      });
+                  ChoiceChip(
+                    label: const Text('Email'),
+                    selected: _isEmailLogin,
+                    onSelected: (val) {
+                      setState(() => _isEmailLogin = true);
                     },
                   ),
-                  // Campo E-mail
-                  if (_isEmailLogin)
-                    TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        labelText: 'E-mail',
-                        prefixIcon: Icon(Icons.email),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                        ),
-                      ),
-                      validator: _validateEmail,
-                    ),
-                  // Campo Telefone
-                  if (!_isEmailLogin)
-                    TextFormField(
-                      controller: phoneController,
-                      decoration: InputDecoration(
-                        labelText: 'Telefone',
-                        prefixIcon: Icon(Icons.phone),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                          borderSide: BorderSide(color: Colors.blueAccent),
-                        ),
-                      ),
-                      keyboardType: TextInputType.phone,
-                      validator: _validatePhone,
-                    ),
-                  SizedBox(height: 32),
-
-                  // Botão de Login
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_formKey.currentState?.validate() ?? false) {
-                        if (_isEmailLogin) {
-                          _loginWithEmail(context);
-                        } else {
-                          _loginWithPhone(context);
-                        }
-                      }
+                  const SizedBox(width: 10),
+                  ChoiceChip(
+                    label: const Text('Telefone'),
+                    selected: !_isEmailLogin,
+                    onSelected: (val) {
+                      setState(() => _isEmailLogin = false);
                     },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                    ),
-                    child: Text(
-                      'Login',
-                      style: TextStyle(color: Colors.black),
-                    ),
                   ),
                 ],
               ),
-            ),
-          ],
+              const SizedBox(height: 20),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    if (_isEmailLogin)
+                      TextFormField(
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          prefixIcon: const Icon(Icons.email),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        validator: _validateEmail,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                    if (!_isEmailLogin)
+                      TextFormField(
+                        controller: phoneController,
+                        decoration: InputDecoration(
+                          labelText: 'Telefone',
+                          prefixIcon: const Icon(Icons.phone),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        validator: _validatePhone,
+                        keyboardType: TextInputType.phone,
+                      ),
+                    const SizedBox(height: 20),
+                    
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (_isEmailLogin) {
+                            _loginWithEmail(context);
+                          } else {
+                            _loginWithPhone(context);
+                          }
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        backgroundColor: Colors.blueAccent,
+                      ),
+                      child: const Text(
+                        'Logar',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (_) => RegisterScreen())
+                        );
+                      },
+                      child: const Text(
+                        'Não tem conta? Cadastre-se',
+                        style: TextStyle(color: Colors.blueAccent),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
