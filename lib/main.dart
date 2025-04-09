@@ -14,15 +14,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Jedo',
-      theme: ThemeData(primarySwatch: Colors.green),
+      title: 'Mototáxi',
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      routes: {
-        '/': (context) => SplashScreen(),
-        '/mapa': (context) => MapScreen(),
-        '/login': (context) => LoginScreen(), // Rota para a tela de login
-      },
+      theme: ThemeData.dark(), // você pode personalizar se quiser
+      home: LoginScreen(), // inicializa com a tela de login
     );
   }
 }
