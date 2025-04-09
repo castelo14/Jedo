@@ -10,12 +10,45 @@ class RegisterScreen extends StatelessWidget {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
 
+  Future<bool> _verificarDuplicado(String email, String telefone) async {
+    try {
+      // Verificando se o e-mail já existe no Firestore
+      final emailQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+
+      // Verificando se o telefone já existe no Firestore
+      final phoneQuery = await FirebaseFirestore.instance
+          .collection('users')
+          .where('phone', isEqualTo: telefone)
+          .get();
+
+      // Se já existir algum e-mail ou telefone, retorna true (duplicado)
+      return emailQuery.docs.isNotEmpty || phoneQuery.docs.isNotEmpty;
+    } catch (e) {
+      print('Erro ao verificar duplicado: $e');
+      return false;
+    }
+  }
+
+
   // Função para registrar o usuário
   Future<void> _register(BuildContext context) async {
     final name = nameController.text.trim();
     final surname = surnameController.text.trim();
     final email = emailController.text.trim();
     final phone = phoneController.text.trim();
+
+    // Verificar se o e-mail ou telefone já estão cadastrados
+    bool isDuplicado = await _verificarDuplicado(email, phone);
+
+    if (isDuplicado) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('E-mail ou Telefone já cadastrados!'),
+      ));
+      return; // Impede o cadastro caso seja duplicado
+    }
 
     try {
       // Adicionar os dados ao Firestore
@@ -38,6 +71,7 @@ class RegisterScreen extends StatelessWidget {
       ));
     }
   }
+
 
   // Função para validar o formato do email
   String? _validateEmail(String? value) {
