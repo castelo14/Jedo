@@ -10,6 +10,54 @@ class MapScreen extends StatefulWidget {
   @override
   _MapScreenState createState() => _MapScreenState();
 }
+class HelpScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Ajuda")),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ListView(
+          children: [
+            Text(
+              "Como usar a aplicação:",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "1. Insira o destino no campo de pesquisa.",
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            Text(
+              "2. Selecione uma sugestão de local.",
+              style: TextStyle(fontSize: 16),
+            ),
+            Text(
+              "3. A rota será traçada no mapa com o tempo estimado.",
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            SizedBox(height: 20),
+            Text(
+              "Caso precise de mais ajuda, entre em contato conosco!",
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+            SizedBox(height: 20),
+            Center(
+
+            ),
+            Text(
+              "Telefone: +244 928 647 075",
+              
+              style: TextStyle(
+                
+                fontSize: 20, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 class _MapScreenState extends State<MapScreen> {
   GoogleMapController? _controller;
@@ -196,9 +244,14 @@ class _MapScreenState extends State<MapScreen> {
             ListTile(
               leading: Icon(Icons.help),
               title: Text('Ajuda'),
+              
               onTap: () {
-                // Lógica para abrir a ajuda
-                Navigator.pop(context);
+               Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HelpScreen(), // Tela de ajuda
+                ),
+              );
               },
             ),
             ListTile(
