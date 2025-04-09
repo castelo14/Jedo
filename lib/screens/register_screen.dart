@@ -109,7 +109,14 @@ class RegisterScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CircleAvatar(radius: 50, backgroundImage: AssetImage('assets/user.png')),
+            //ircleAvatar(radius: 50, backgroundImage: AssetImage('assets/user.png')),
+            Image.asset(
+                'assets/logo.png', 
+                height: 100,
+                errorBuilder: (context, error, stackTrace) {
+                  return Icon(Icons.error, color: Colors.red, size: 50);
+                },
+              ),
             //Center(
             //  child: Image.asset(
             //    'assets/images/user.png', // Caminho da sua imagem
